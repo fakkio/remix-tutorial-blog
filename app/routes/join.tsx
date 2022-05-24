@@ -3,16 +3,16 @@ import type {
   LoaderFunction,
   MetaFunction,
 } from "@remix-run/node";
-import { json, redirect } from "@remix-run/node";
-import { Form, Link, useActionData, useSearchParams } from "@remix-run/react";
+import {json, redirect} from "@remix-run/node";
+import {Form, Link, useActionData, useSearchParams} from "@remix-run/react";
 import * as React from "react";
 
-import { getUserId, createUserSession } from "~/session.server";
+import {getUserId, createUserSession} from "~/session.server";
 
-import { createUser, getUserByEmail } from "~/models/user.server";
-import { safeRedirect, validateEmail } from "~/utils";
+import {createUser, getUserByEmail} from "~/models/user.server";
+import {safeRedirect, validateEmail} from "~/utils";
 
-export const loader: LoaderFunction = async ({ request }) => {
+export const loader: LoaderFunction = async ({request}) => {
   const userId = await getUserId(request);
   if (userId) return redirect("/");
   return json({});
@@ -25,7 +25,7 @@ interface ActionData {
   };
 }
 
-export const action: ActionFunction = async ({ request }) => {
+export const action: ActionFunction = async ({request}) => {
   const formData = await request.formData();
   const email = formData.get("email");
   const password = formData.get("password");
@@ -33,30 +33,30 @@ export const action: ActionFunction = async ({ request }) => {
 
   if (!validateEmail(email)) {
     return json<ActionData>(
-      { errors: { email: "Email is invalid" } },
-      { status: 400 }
+      {errors: {email: "Email is invalid"}},
+      {status: 400}
     );
   }
 
   if (typeof password !== "string" || password.length === 0) {
     return json<ActionData>(
-      { errors: { password: "Password is required" } },
-      { status: 400 }
+      {errors: {password: "Password is required"}},
+      {status: 400}
     );
   }
 
   if (password.length < 8) {
     return json<ActionData>(
-      { errors: { password: "Password is too short" } },
-      { status: 400 }
+      {errors: {password: "Password is too short"}},
+      {status: 400}
     );
   }
 
   const existingUser = await getUserByEmail(email);
   if (existingUser) {
     return json<ActionData>(
-      { errors: { email: "A user already exists with this email" } },
-      { status: 400 }
+      {errors: {email: "A user already exists with this email"}},
+      {status: 400}
     );
   }
 

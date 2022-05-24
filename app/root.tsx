@@ -3,7 +3,7 @@ import type {
   LoaderFunction,
   MetaFunction,
 } from "@remix-run/node";
-import { json } from "@remix-run/node";
+import {json} from "@remix-run/node";
 import {
   Links,
   LiveReload,
@@ -14,10 +14,10 @@ import {
 } from "@remix-run/react";
 
 import tailwindStylesheetUrl from "./styles/tailwind.css";
-import { getUser } from "./session.server";
+import {getUser} from "./session.server";
 
 export const links: LinksFunction = () => {
-  return [{ rel: "stylesheet", href: tailwindStylesheetUrl }];
+  return [{rel: "stylesheet", href: tailwindStylesheetUrl}];
 };
 
 export const meta: MetaFunction = () => ({
@@ -30,7 +30,7 @@ type LoaderData = {
   user: Awaited<ReturnType<typeof getUser>>;
 };
 
-export const loader: LoaderFunction = async ({ request }) => {
+export const loader: LoaderFunction = async ({request}) => {
   return json<LoaderData>({
     user: await getUser(request),
   });

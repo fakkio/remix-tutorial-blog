@@ -35,10 +35,10 @@ function login({
 }: {
   email?: string;
 } = {}) {
-  cy.then(() => ({ email })).as("user");
+  cy.then(() => ({email})).as("user");
   cy.exec(
     `npx ts-node --require tsconfig-paths/register ./cypress/support/create-user.ts "${email}"`
-  ).then(({ stdout }) => {
+  ).then(({stdout}) => {
     const cookieValue = stdout
       .replace(/.*<cookie>(?<cookieValue>.*)<\/cookie>.*/s, "$<cookieValue>")
       .trim();
@@ -47,12 +47,12 @@ function login({
   return cy.get("@user");
 }
 
-function cleanupUser({ email }: { email?: string } = {}) {
+function cleanupUser({email}: {email?: string} = {}) {
   if (email) {
     deleteUserByEmail(email);
   } else {
     cy.get("@user").then((user) => {
-      const email = (user as { email?: string }).email;
+      const email = (user as {email?: string}).email;
       if (email) {
         deleteUserByEmail(email);
       }
